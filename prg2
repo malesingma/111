@@ -1,0 +1,42 @@
+CREATE TABLE Employee (
+EMPNO INT,
+ENAME VARCHAR(50),
+JOB VARCHAR(50),
+MANAGER_ID INT,
+SAL DECIMAL(10,2),
+COMM DECIMAL(10,2)
+);
+
+ALTER TABLE Employee
+ADD COLUMN COMM DECIMAL(10,2);
+
+INSERT INTO Employee (EMPNO, ENAME, JOB, MANAGER_ID, SAL, COMM)VALUES
+(101, 'John Doe', 'Manager', NULL, 5000.00, 500.00),
+(102, 'Jane Smith', 'Developer', 101, 4500.00, 400.00),
+(103, 'Michael Johnson', 'Analyst', 101, 4000.00, 300.00),
+(104, 'Emily Brown', 'Designer', 102, 3800.00, 250.00),
+(105, 'David Lee', 'Intern', 103, 2500.00, 150.00);
+
+UPDATE Employee
+SET JOB = 'Senior Manager'
+WHERE EMPNO = 101;
+UPDATE Employee
+SET JOB = 'Senior Developer'
+WHERE EMPNO = 102;
+UPDATE Employee
+SET JOB = 'Senior Analyst'
+WHERE EMPNO = 103;
+UPDATE Employee
+SET JOB = 'Senior Designer'
+WHERE EMPNO = 104;
+UPDATE Employee
+SET JOB = 'Associate Intern'
+WHERE EMPNO = 105;
+
+ALTER TABLE Employee
+RENAME COLUMN EMPNO TO Employee_ID;
+
+DELETE FROM Employee
+WHERE Employee_ID = 105;
+
+SELECT * FROM Employee;
