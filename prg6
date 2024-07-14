@@ -1,0 +1,81 @@
+CREATE TABLE N_RollCall (
+    ID NUMBER PRIMARY KEY,
+    RollNumber NUMBER NOT NULL,
+    Name VARCHAR2(100),
+    AttendanceDate DATE
+);
+
+CREATE TABLE O_RollCall (
+    ID NUMBER PRIMARY KEY,
+    RollNumber NUMBER NOT NULL,
+    Name VARCHAR2(100),
+    AttendanceDate DATE
+);
+
+
+
+INSERT INTO N_RollCall (ID, RollNumber, Name, AttendanceDate)
+VALUES (1, 1, 'Arjun Mehta', DATE '2024-06-01');
+
+INSERT INTO N_RollCall (ID, RollNumber, Name, AttendanceDate)
+VALUES (2, 2, 'Priya Sharma', DATE '2024-06-01');
+
+INSERT INTO N_RollCall (ID, RollNumber, Name, AttendanceDate)
+VALUES (3, 3, 'Ravi Kumar', DATE '2024-06-01');
+
+INSERT INTO N_RollCall (ID, RollNumber, Name, AttendanceDate)
+VALUES (4, 4, 'Neha Verma', DATE '2024-06-01');
+
+INSERT INTO N_RollCall (ID, RollNumber, Name, AttendanceDate)
+VALUES (5, 5, 'Vikram Singh', DATE '2024-06-01');
+
+
+INSERT INTO O_RollCall (ID, RollNumber, Name, AttendanceDate)
+VALUES (1, 1, 'Arjun Mehta', DATE '2024-06-01');
+
+INSERT INTO O_RollCall (ID, RollNumber, Name, AttendanceDate)
+VALUES (2, 2, 'Priya Sharma', DATE '2024-06-01');
+
+DECLARE
+   
+   CURSOR c_rollcall (p_id N_ROLLCALL.id%TYPE) IS
+      SELECT * FROM N_ROLLCALL WHERE id = p_id;
+
+   v_record N_ROLLCALL%ROWTYPE;
+   v_count NUMBER;
+BEGIN
+   
+   FOR r IN (SELECT * FROM N_ROLLCALL) LOOP
+      
+      OPEN c_rollcall(r.id);
+      FETCH c_rollcall INTO v_record;
+
+      
+      IF c_rollcall%FOUND THEN
+        
+         BEGIN
+            SELECT COUNT(*) INTO v_count FROM O_ROLLCALL WHERE id = v_record.id;
+            
+            IF v_count = 0 THEN
+               
+               INSERT INTO O_ROLLCALL (ID, RollNumber, Name, AttendanceDate)
+               VALUES (v_record.ID, v_record.RollNumber, v_record.Name, v_record.AttendanceDate);
+            END IF;
+         EXCEPTION
+            WHEN NO_DATA_FOUND THEN
+               
+               NULL;
+         END;
+      END IF;
+
+      
+      CLOSE c_rollcall;
+   END LOOP;
+END;
+/
+
+
+select * from O_RollCall;
+delete from O_RollCall where id=1;
+
+
