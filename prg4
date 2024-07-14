@@ -1,0 +1,48 @@
+ CREATE TABLE CUSTOMERS (
+         ID INT PRIMARY KEY,
+         NAME VARCHAR(100),
+         AGE INT,
+         ADDRESS VARCHAR(255),
+         SALARY DECIMAL(10, 2)
+     );
+
+
+
+
+ CREATE OR REPLACE TRIGGER salary_difference_trigger
+      BEFORE INSERT OR UPDATE OR DELETE ON CUSTOMERS
+      FOR EACH ROW
+      DECLARE
+          old_salary NUMBER;
+          new_salary NUMBER;
+      BEGIN
+          IF INSERTING OR UPDATING THEN
+              old_salary := NVL(:OLD.SALARY, 0);
+              new_salary := NVL(:NEW.SALARY, 0);
+              DBMS_OUTPUT.PUT_LINE('Salary difference: ' || (new_salary - old_salary));
+          ELSIF DELETING THEN
+              old_salary := NVL(:OLD.SALARY, 0);
+              DBMS_OUTPUT.PUT_LINE('Salary before deletion: ' || old_salary);
+          END IF;
+      END;
+      /
+
+ SET SERVEROUTPUT ON;
+ INSERT INTO CUSTOMERS (ID, NAME, AGE, ADDRESS, SALARY) VALUES (1, 'John Doe', 30, '123 Main St', 50000);
+ 
+ select * from customers;
+    
+ Update customers set salary=70000 where id=1;
+ 
+ select * from customers;
+
+    
+delete from customers where id=1;
+
+select * from customers;
+
+
+
+
+
+
